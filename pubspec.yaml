@@ -31,6 +31,7 @@ dependencies:
   # UI
   cupertino_icons: ^1.0.6
   google_fonts: ^6.2.1
+  sliding_up_panel: ^2.0.0+1
 
   # Firebase
   firebase_core: ^2.30.0
@@ -58,3 +59,5 @@ flutter:
 
   assets:
     - .env
+    - assets/
+    - assets/markers/

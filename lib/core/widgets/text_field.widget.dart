@@ -24,11 +24,11 @@ class CSTextField extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(color: AppAssets.colors.black),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(color: AppAssets.colors.black),
         ),
         labelText: label,

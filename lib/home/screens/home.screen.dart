@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -20,7 +21,9 @@ class HomeScreen extends ConsumerWidget {
     AppTranslations.init(context);
 
     final coinseekRouter = ref.watch(csRouterProvider);
+
     final currentLatLng = ref.watch(currentLocationProvider);
+    final coinMarkers = ref.watch(coinMarkersProvider);
 
     final Completer<GoogleMapController> completer =
         Completer<GoogleMapController>();
@@ -53,24 +56,54 @@ class HomeScreen extends ConsumerWidget {
           LatLng(currentPos.latitude, currentPos.longitude);
     }
 
+    void setMarker() async {
+      final icon =
+          await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), '');
+
+      ref.read(userLocationMarkerProvider.notifier).state = icon;
+    }
+
     getCurrentLocation();
+
+    Widget homeBody() {
+      if (currentLatLng == null) {
+        return Center(
+          child: CircularProgressIndicator(color: AppAssets.colors.black),
+        );
+      }
+
+      return Stack(
+        children: [
+          GoogleMap(
+            myLocationEnabled: true,
+            markers: coinMarkers,
+            initialCameraPosition: CameraPosition(
+              target: currentLatLng,
+              zoom: 17.5,
+            ),
+            onMapCreated: (GoogleMapController controller) {
+              completer.complete(controller);
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: CircleAvatar(),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Scaffold(
       appBar: nilAppBar(),
-      body: currentLatLng != null
-          ? GoogleMap(
-              markers: {},
-              initialCameraPosition: CameraPosition(
-                target: currentLatLng,
-                zoom: 19.151926040649414,
-              ),
-              onMapCreated: (GoogleMapController controller) {
-                completer.complete(controller);
-              },
-            )
-          : Center(
-              child: CircularProgressIndicator(color: AppAssets.colors.black),
-            ),
+      body: SlidingUpPanel(
+        body: homeBody(),
+        panel: const Placeholder(),
+        collapsed: Text("neki"),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
     );
   }
 }

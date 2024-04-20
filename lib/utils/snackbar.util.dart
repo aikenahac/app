@@ -18,8 +18,8 @@ void showSnackbar(String message) {
           message,
         ),
       ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
       ),
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(bottom: _bottomMargin ?? 0, left: 15, right: 15),
