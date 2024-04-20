@@ -59,7 +59,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: nilAppBar(),
       body: currentLatLng != null
           ? GoogleMap(
-              initialCameraPosition: CameraPosition(target: currentLatLng),
+              markers: {},
+              initialCameraPosition: CameraPosition(
+                target: currentLatLng,
+                zoom: 19.151926040649414,
+              ),
               onMapCreated: (GoogleMapController controller) {
                 completer.complete(controller);
               },
