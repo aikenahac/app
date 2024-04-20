@@ -1,4 +1,4 @@
-import 'package:coinseek/auth/providers/register_fields.provider.dart';
+import 'package:coinseek/auth/providers/login_fields.provider.dart';
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/bottom_button.widget.dart';
@@ -10,67 +10,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RegisterScreen extends ConsumerWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AppTranslations.init(context);
 
-    final displayNameController = ref.watch(displayNameRegisterProvider);
-    final emailController = ref.watch(emailRegisterProvider);
-    final passwordController = ref.watch(passwordRegisterProvider);
-    final confirmPasswordController =
-        ref.watch(confirmPasswordRegisterProvider);
-    final obscurePasswordController = ref.watch(obscurePaswordRegisterProvider);
+    final emailController = ref.watch(emailLoginProvider);
+    final passwordController = ref.watch(passwordLoginProvider);
+    final obscurePasswordController = ref.watch(obscurePaswordLoginProvider);
 
     final coinseekRouter = ref.watch(csRouterProvider);
 
-    void register() async {
-      if (displayNameController.text.isEmpty ||
-          emailController.text.isEmpty ||
-          passwordController.text.isEmpty ||
-          confirmPasswordController.text.isEmpty) {
-        showSnackbar(tr.enter_all_fields);
-        return;
-      }
-
-      if (passwordController.text != confirmPasswordController.text) {
-        showSnackbar(tr.password_no_match);
-        return;
-      }
-
+    void login() async {
       try {
-        await CSApi.auth.createUserWithEmailAndPassword(
+        final credential = await CSApi.auth.signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
+
+        print(credential);
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          showSnackbar(tr.weak_password);
-        } else if (e.code == 'email-already-in-use') {
-          showSnackbar(tr.user_exists);
+        if (e.code == 'user-not-found') {
+          print(tr.no_user_found);
+          showSnackbar(tr.no_user_found);
+        } else if (e.code == 'wrong-password') {
+          print(tr.wrong_password);
+          showSnackbar(tr.wrong_password);
         }
       } catch (e) {
         print(e);
-        return;
       }
-
-      print("Curr: ${CSApi.auth.currentUser?.email}");
-
-      try {
-        //
-      } catch (e) {
-        print('Error');
-        return;
-      }
-
-      coinseekRouter.push(CSRoutes.home);
-
-      displayNameController.clear();
-      emailController.clear();
-      passwordController.clear();
-      confirmPasswordController.clear();
     }
 
     return Scaffold(
@@ -82,7 +53,7 @@ class RegisterScreen extends ConsumerWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                tr.register,
+                tr.login,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 36.0,
@@ -94,25 +65,14 @@ class RegisterScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CSTextField(
-                  controller: displayNameController,
-                  label: tr.display_name,
-                ),
-                const SizedBox(height: 10.0),
-                CSTextField(
                   controller: emailController,
                   label: tr.email,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
                 CSTextField(
                   controller: passwordController,
                   label: tr.password,
-                  obscured: obscurePasswordController,
-                ),
-                const SizedBox(height: 10.0),
-                CSTextField(
-                  controller: confirmPasswordController,
-                  label: tr.confirm_password,
                   obscured: obscurePasswordController,
                 ),
               ],
@@ -121,8 +81,8 @@ class RegisterScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 BottomButton(
-                  label: tr.register,
-                  onPressed: () => register(),
+                  label: tr.login,
+                  onPressed: () => login(),
                 ),
                 TextButton(
                   onPressed: () => coinseekRouter.push(CSRoutes.splash),

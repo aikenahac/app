@@ -1,3 +1,4 @@
+import 'package:coinseek/utils/assets.util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,12 +23,20 @@ class CSTextField extends StatelessWidget {
       obscureText: obscured,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        border: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: AppAssets.colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(color: AppAssets.colors.black),
         ),
         labelText: label,
-        labelStyle: GoogleFonts.poppins(),
+        labelStyle: GoogleFonts.poppins(
+          color: AppAssets.colors.black,
+        ),
       ),
+      cursorColor: AppAssets.colors.black,
       style: GoogleFonts.poppins(),
     );
   }

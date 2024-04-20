@@ -3,10 +3,17 @@
   "login": "Login",
   "register": "Register",
   "display_name": "Display name",
-  "username": "Username",
   "email": "Email",
   "password": "Password",
   "confirm_password": "Confirm password",
   "go_back": "Go back",
-  "password_no_match": "Passwords do not match"
+  "password_no_match": "Passwords do not match",
+  "no_user_found": "No user found for that email.",
+  "wrong_password": "Wrong password provided for that user.",
+  "enter_all_fields": "Please input all fields",
+  "user_exists": "This user already exists",
+  "weak_password": "This password is too weak",
+  "logout": "Logout",
+  "location_services_disabled": "Location services on this device are not enabled",
+  "location_disallowed": "Location permissions are not allowed for this app"
 }

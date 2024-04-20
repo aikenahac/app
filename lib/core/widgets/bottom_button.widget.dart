@@ -23,12 +23,12 @@ class BottomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0.0,
-          backgroundColor: AppAssets.colors.black,
+          backgroundColor: AppAssets.colors.white,
           shape: outline
               ? RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0),
                   side: BorderSide(
-                    color: AppAssets.colors.whiteFaded,
+                    color: AppAssets.colors.black,
                     width: 0.5,
                   ),
                 )
@@ -38,7 +38,7 @@ class BottomButton extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: AppAssets.colors.whiteFaded,
+            color: AppAssets.colors.black,
             fontSize: 20.0,
           ),
         ),

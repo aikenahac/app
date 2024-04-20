@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final displayNameRegisterProvider =
     StateProvider<TextEditingController>((ref) => TextEditingController());
-final usernameRegisterProvider =
-    StateProvider<TextEditingController>((ref) => TextEditingController());
 final emailRegisterProvider =
     StateProvider<TextEditingController>((ref) => TextEditingController());
 final passwordRegisterProvider =

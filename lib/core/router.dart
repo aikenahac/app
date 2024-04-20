@@ -1,6 +1,8 @@
+import 'package:coinseek/auth/screens/login.screen.dart';
 import 'package:coinseek/auth/screens/register.screen.dart';
 import 'package:coinseek/auth/screens/splash.screen.dart';
 import 'package:coinseek/core/api/api.dart';
+import 'package:coinseek/home/screens/home.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +25,7 @@ class CSRouter {
         CSRoutes.login,
         CSRoutes.register,
       ];
-      final accessToken = (await CSApi.auth.getToken());
+      final isSignedIn = CSApi.isSignedIn();
 
       if (state.fullPath == CSRoutes.splash) {
         final forceClose = state.extra == true;
@@ -31,12 +33,12 @@ class CSRouter {
           return CSRoutes.splash;
         }
 
-        if (accessToken?.isNotEmpty ?? false) {
+        if (isSignedIn) {
           return CSRoutes.home;
         }
       }
 
-      if (accessToken?.isEmpty ?? true) {
+      if (!isSignedIn) {
         if (exceptions.contains(state.fullPath)) {
           return state.fullPath;
         }
@@ -56,11 +58,11 @@ class CSRouter {
       ),
       GoRoute(
         path: CSRoutes.login,
-        builder: (context, state) => Container(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: CSRoutes.home,
-        builder: (context, state) => Container(),
+        builder: (context, state) => const HomeScreen(),
       ),
     ],
   );

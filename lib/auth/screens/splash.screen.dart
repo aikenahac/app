@@ -1,5 +1,6 @@
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/bottom_button.widget.dart';
+import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,7 @@ class SplashScreen extends ConsumerWidget {
     final coinseekRouter = ref.watch(csRouterProvider);
 
     return Scaffold(
+      appBar: nilAppBar(),
       body: SizedBox(
         width: width,
         height: height,
@@ -31,7 +33,7 @@ class SplashScreen extends ConsumerWidget {
                 style: GoogleFonts.chakraPetch(
                   textStyle: TextStyle(
                     fontSize: 80.0,
-                    color: AppAssets.colors.white,
+                    color: AppAssets.colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -57,6 +59,7 @@ class SplashScreen extends ConsumerWidget {
                       coinseekRouter.push(CSRoutes.register);
                     },
                   ),
+                  const SizedBox(height: 20.0),
                 ],
               ),
             ),
