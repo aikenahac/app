@@ -21,7 +21,7 @@ class ApiClient {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    final accessToken = CSApi.auth.currentUser?.refreshToken ?? '/';
+    final accessToken = await CSApi.auth.currentUser?.getIdToken() ?? '/';
 
     if (accessToken != '/') {
       headers.addAll({
@@ -111,7 +111,7 @@ class ApiClient {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    final accessToken = CSApi.auth.currentUser?.refreshToken ?? '/';
+    final accessToken = await CSApi.auth.currentUser?.getIdToken() ?? '/';
 
     if (accessToken != '/') {
       headers.addAll({
@@ -165,7 +165,7 @@ class ApiClient {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    final accessToken = CSApi.auth.currentUser?.refreshToken ?? '/';
+    final accessToken = await CSApi.auth.currentUser?.getIdToken() ?? '/';
 
     if (accessToken != '/') {
       headers.addAll({
@@ -209,7 +209,7 @@ class ApiClient {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    final accessToken = CSApi.auth.currentUser?.refreshToken ?? '/';
+    final accessToken = await CSApi.auth.currentUser?.getIdToken() ?? '/';
 
     if (accessToken != '/') {
       headers.addAll({

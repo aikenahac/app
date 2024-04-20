@@ -25,12 +25,10 @@ class LoginScreen extends ConsumerWidget {
 
     void login() async {
       try {
-        final credential = await CSApi.auth.signInWithEmailAndPassword(
+        await CSApi.auth.signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
-
-        print(credential);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print(tr.no_user_found);
@@ -39,9 +37,16 @@ class LoginScreen extends ConsumerWidget {
           print(tr.wrong_password);
           showSnackbar(tr.wrong_password);
         }
+        return;
       } catch (e) {
         print(e);
+        return;
       }
+
+      coinseekRouter.push(CSRoutes.home);
+
+      emailController.clear();
+      passwordController.clear();
     }
 
     return Scaffold(

@@ -7,7 +7,9 @@ class CSApi {
   static final home = HomeApi();
 
   static Future<void> setDisplayName(String displayName) async {
-    await ApiClient.patch('/user');
+    await ApiClient.patch('/user', {
+      "name": displayName,
+    });
   }
 
   static bool isSignedIn() {

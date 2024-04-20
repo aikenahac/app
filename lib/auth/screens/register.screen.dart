@@ -56,12 +56,10 @@ class RegisterScreen extends ConsumerWidget {
         return;
       }
 
-      print("Curr: ${CSApi.auth.currentUser?.email}");
-
       try {
-        //
+        await CSApi.setDisplayName(displayNameController.text);
       } catch (e) {
-        print('Error');
+        print('Error $e');
         return;
       }
 

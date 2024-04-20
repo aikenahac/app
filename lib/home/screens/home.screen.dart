@@ -86,7 +86,13 @@ class HomeScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(12.0),
             child: Align(
               alignment: Alignment.topRight,
-              child: CircleAvatar(),
+              child: FloatingActionButton(
+                onPressed: () async {
+                  await CSApi.auth.signOut();
+                  coinseekRouter.push(CSRoutes.splash);
+                },
+                child: Icon(Icons.logout, color: AppAssets.colors.black),
+              ),
             ),
           ),
         ],
