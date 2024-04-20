@@ -25,7 +25,7 @@ class App extends ConsumerWidget {
           scaffoldBackgroundColor: AppAssets.colors.white,
           primaryColor: AppAssets.colors.black,
           colorScheme: ColorScheme.light(
-            primary: AppAssets.colors.black,
+            primary: AppAssets.colors.white,
           ),
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: AppAssets.colors.black,

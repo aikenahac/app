@@ -90,6 +90,7 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: () async {
                   await CSApi.auth.signOut();
                   coinseekRouter.push(CSRoutes.splash);
+                  coinMarkers.clear();
                 },
                 child: Icon(Icons.logout, color: AppAssets.colors.black),
               ),
