@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "778970078612",
+    "project_id": "coinseek-138e6",
+    "storage_bucket": "coinseek-138e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778970078612:android:730532b71eb6c761760381",
+        "android_client_info": {
+          "package_name": "com.example.coinseek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV4j9bYZAkZDJgspuWGQknSrex7HJfgXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

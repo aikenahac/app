@@ -1,3 +1,5 @@
+import 'package:coinseek/auth/screens/register.screen.dart';
+import 'package:coinseek/auth/screens/splash.screen.dart';
 import 'package:coinseek/core/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +45,24 @@ class CSRouter {
 
       return null;
     },
-    routes: [],
+    routes: [
+      GoRoute(
+        path: CSRoutes.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: CSRoutes.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: CSRoutes.login,
+        builder: (context, state) => Container(),
+      ),
+      GoRoute(
+        path: CSRoutes.home,
+        builder: (context, state) => Container(),
+      ),
+    ],
   );
 }
 

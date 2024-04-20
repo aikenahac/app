@@ -1,4 +1,12 @@
 {
   "@@locale": "en",
-  "login": "Login"
+  "login": "Login",
+  "register": "Register",
+  "display_name": "Display name",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "confirm_password": "Confirm password",
+  "go_back": "Go back",
+  "password_no_match": "Passwords do not match"
 }
