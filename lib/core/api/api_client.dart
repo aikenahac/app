@@ -59,14 +59,14 @@ class ApiClient {
 
   // GET function
   // Retrieves JSON data from the API to the app
-  static Future<dynamic> getMany(String endpoint) async {
+  static Future<List<dynamic>> getMany(String endpoint) async {
     final url = Uri.parse(apiUrl + endpoint);
 
     final headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
-    final accessToken = CSApi.auth.currentUser?.refreshToken ?? '/';
+    final accessToken = await CSApi.auth.currentUser?.getIdToken() ?? '/';
 
     if (accessToken != '/') {
       headers.addAll({
@@ -79,10 +79,10 @@ class ApiClient {
       headers: headers,
     );
 
-    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+    final List<dynamic> responseBody = jsonDecode(response.body);
 
     if (response.statusCode > 299) {
-      String message = responseBody['message'];
+      String message = '';
 
       showSnackbar(message);
       switch (response.statusCode) {

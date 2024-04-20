@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:coinseek/core/api/api.dart';
+import 'package:coinseek/core/api/api_client.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/home/providers/base_error.provider.dart';
+import 'package:coinseek/home/providers/data.provider.dart';
 import 'package:coinseek/home/providers/location.provider.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
@@ -24,6 +26,8 @@ class HomeScreen extends ConsumerWidget {
 
     final currentLatLng = ref.watch(currentLocationProvider);
     final coinMarkers = ref.watch(coinMarkersProvider);
+
+    final homeData = ref.watch(asyncDataProvider);
 
     final Completer<GoogleMapController> completer =
         Completer<GoogleMapController>();
@@ -54,13 +58,6 @@ class HomeScreen extends ConsumerWidget {
       final currentPos = await Geolocator.getCurrentPosition();
       ref.read(currentLocationProvider.notifier).state =
           LatLng(currentPos.latitude, currentPos.longitude);
-    }
-
-    void setMarker() async {
-      final icon =
-          await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), '');
-
-      ref.read(userLocationMarkerProvider.notifier).state = icon;
     }
 
     getCurrentLocation();
@@ -96,14 +93,22 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
-    return Scaffold(
-      appBar: nilAppBar(),
-      body: SlidingUpPanel(
-        body: homeBody(),
-        panel: const Placeholder(),
-        collapsed: Text("neki"),
-        borderRadius: BorderRadius.circular(20.0),
-      ),
+    return homeData.when(
+      loading: () => Scaffold(
+          body: Center(
+              child: CircularProgressIndicator(color: AppAssets.colors.black))),
+      error: (err, stack) => const Scaffold(body: Center(child: Text('err'))),
+      data: (home) {
+        return Scaffold(
+          appBar: nilAppBar(),
+          body: SlidingUpPanel(
+            body: homeBody(),
+            panel: const Placeholder(),
+            collapsed: Text("neki"),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        );
+      },
     );
   }
 }

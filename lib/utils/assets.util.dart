@@ -16,4 +16,6 @@ class AppColors {
   Color darkGreen = const Color(0xff2EC4B6);
 }
 
-class AppImages {}
+class AppImages {
+  String markerIcon = 'assets/markers/coin.png';
+}
