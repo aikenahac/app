@@ -5,12 +5,12 @@ import 'package:coinseek/core/widgets/bottom_button.widget.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/core/widgets/text_field.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
+import 'package:coinseek/utils/current_location.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:coinseek/utils/snackbar.util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
@@ -27,27 +27,6 @@ class RegisterScreen extends ConsumerWidget {
     final obscurePasswordController = ref.watch(obscurePaswordRegisterProvider);
 
     final coinseekRouter = ref.watch(csRouterProvider);
-
-    Future<Position?> getCurrentLocation() async {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        return null;
-      }
-
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          return null;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        return null;
-      }
-
-      return await Geolocator.getCurrentPosition();
-    }
 
     void register() async {
       if (displayNameController.text.isEmpty ||

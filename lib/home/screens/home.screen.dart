@@ -11,6 +11,7 @@ import 'package:coinseek/home/widgets/map_fab.widget.dart';
 import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
 import 'package:coinseek/home/widgets/pfp.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
+import 'package:coinseek/utils/current_location.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,27 +47,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void dispose() {
     super.dispose();
     updateLocationTimer.cancel();
-  }
-
-  Future<Position?> getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return null;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return null;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return null;
-    }
-
-    return await Geolocator.getCurrentPosition();
   }
 
   void reportCurrentLocation() async {
