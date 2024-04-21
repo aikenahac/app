@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
-import 'package:coinseek/home/providers/base_error.provider.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
-import 'package:coinseek/home/providers/location.provider.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
@@ -22,58 +20,73 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final Timer updateLocationTimer;
+
+  LatLng? currentLocation;
+
   @override
   void initState() {
     super.initState();
+    reportCurrentLocation();
+    updateLocationTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      reportCurrentLocation();
+    });
   }
 
-  getCurrentLocation() {}
+  @override
+  void dispose() {
+    super.dispose();
+    updateLocationTimer.cancel();
+  }
+
+  Future<Position?> getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return null;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return null;
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void reportCurrentLocation() async {
+    final location = await getCurrentLocation();
+    if (location == null) return;
+
+    final latlng = LatLng(location.latitude, location.longitude);
+
+    setState(() => currentLocation = latlng);
+
+    final collected = await CSApi.home.reportLocation(latlng);
+
+    if (collected.isNotEmpty) {
+      ref.invalidate(asyncDataProvider);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     AppTranslations.init(context);
 
     final coinseekRouter = ref.watch(csRouterProvider);
-
-    final currentLatLng = ref.watch(currentLocationProvider);
-
     final homeData = ref.watch(asyncDataProvider);
 
     final Completer<GoogleMapController> completer =
         Completer<GoogleMapController>();
 
-    void getCurrentLocation() async {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        ref.read(locationErrorProvider.notifier).state =
-            tr.location_services_disabled;
-        return;
-      }
-
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          ref.read(locationErrorProvider.notifier).state =
-              tr.location_disallowed;
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        ref.read(locationErrorProvider.notifier).state = tr.location_disallowed;
-        return;
-      }
-
-      final currentPos = await Geolocator.getCurrentPosition();
-      ref.read(currentLocationProvider.notifier).state =
-          LatLng(currentPos.latitude, currentPos.longitude);
-    }
-
-    getCurrentLocation();
-
     Widget homeBody(Set<Marker> markers) {
-      if (currentLatLng == null) {
+      if (currentLocation == null) {
         return Center(
           child: CircularProgressIndicator(color: AppAssets.colors.black),
         );
@@ -85,7 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             myLocationEnabled: true,
             markers: markers,
             initialCameraPosition: CameraPosition(
-              target: currentLatLng,
+              target: currentLocation!,
               zoom: 17.5,
             ),
             onMapCreated: (GoogleMapController controller) {

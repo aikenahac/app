@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/api/exceptions/bad_request.exception.dart';
 import 'package:coinseek/core/api/exceptions/conflict.exception.dart';
@@ -7,6 +7,7 @@ import 'package:coinseek/core/api/exceptions/forbidden.exception.dart';
 import 'package:coinseek/core/api/exceptions/unauthorized.exception.dart';
 import 'package:coinseek/core/globals.dart';
 import 'package:coinseek/utils/snackbar.util.dart';
+import 'package:http/http.dart' as http;
 
 // Class that holds all the network requests
 class ApiClient {
