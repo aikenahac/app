@@ -9,12 +9,6 @@ class AsyncRequests extends _$AsyncRequests {
   Future<List<UserModel>> _fetchFriendRequests() async {
     final requests = await CSApi.home.getFriendRequests();
 
-    print('---------------------------');
-    print(requests[0].name);
-    print(requests[0].balance);
-    print(requests[0].email);
-    print('---------------------------');
-
     return requests;
   }
 

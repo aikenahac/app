@@ -1,3 +1,4 @@
+import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/home/api/models/user.model.dart';
 import 'package:coinseek/home/widgets/pfp.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
@@ -9,9 +10,11 @@ class FriendRequestWidget extends ConsumerWidget {
   const FriendRequestWidget({
     super.key,
     required this.user,
+    required this.onAccept,
   });
 
   final UserModel user;
+  final Function() onAccept;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,7 +52,10 @@ class FriendRequestWidget extends ConsumerWidget {
         ),
         const Spacer(),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () async {
+            await CSApi.home.acceptFriendRequest(user.email);
+            onAccept();
+          },
           style: ElevatedButton.styleFrom(
             elevation: 0.0,
             backgroundColor: AppAssets.colors.darkGreen,

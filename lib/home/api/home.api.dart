@@ -41,9 +41,9 @@ class HomeApi {
     return user;
   }
 
-  Future<void> sendFriendRequest(String friend) async {
+  Future<void> sendFriendRequest(String email) async {
     await ApiClient.post('/friends/request', {
-      "email": friend,
+      "email": email,
     });
   }
 
@@ -51,11 +51,23 @@ class HomeApi {
     final resp = await ApiClient.getMany('/friends/requests');
     final List<UserModel> requests = [];
 
-    for (var req in resp) {
+    for (final req in resp) {
       final parsedRequest = UserModel.fromJson(req);
       requests.add(parsedRequest);
     }
 
     return requests;
+  }
+
+  Future<void> acceptFriendRequest(String email) async {
+    await ApiClient.post('/friends/accept', {
+      "email": email,
+    });
+  }
+
+  Future<List<UserModel>> getFriends() async {
+    final res = await ApiClient.getMany('/friends');
+    print(res);
+    return res.map((u) => UserModel.fromJson(u)).toList();
   }
 }

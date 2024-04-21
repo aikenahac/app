@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/router.dart';
-import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/home/providers/add_friend.provider.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
 import 'package:coinseek/home/providers/requests.provider.dart';
 import 'package:coinseek/home/widgets/friend_request.widget.dart';
+import 'package:coinseek/home/widgets/leaderboard.widget.dart';
 import 'package:coinseek/home/widgets/map_fab.widget.dart';
 import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
 import 'package:coinseek/home/widgets/pfp.widget.dart';
@@ -15,6 +15,7 @@ import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pixelarticons/pixel.dart';
@@ -123,16 +124,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const SizedBox(height: 5.0),
                 requestsData.when(
                   loading: () => Center(
-                      child: CircularProgressIndicator(
-                          color: AppAssets.colors.black)),
+                    child: CircularProgressIndicator(
+                      color: AppAssets.colors.black,
+                    ),
+                  ),
                   error: (err, stack) => Center(child: Text(err.toString())),
                   data: (requests) {
                     return Expanded(
                       child: ListView.separated(
-                        itemBuilder: (c, i) =>
-                            FriendRequestWidget(user: requests[i]),
-                        separatorBuilder: (c, i) => const SizedBox(height: 5.0),
                         itemCount: requests.length,
+                        itemBuilder: (c, i) => FriendRequestWidget(
+                          user: requests[i],
+                          onAccept: () {
+                            ref.invalidate(asyncRequestsProvider);
+                            context.pop();
+                          },
+                        ),
+                        separatorBuilder: (c, i) => const SizedBox(height: 5.0),
                       ),
                     );
                   },
@@ -164,40 +172,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               completer.complete(controller);
             },
           ),
-          MapFabWidget(
-            alignment: Alignment.topRight,
-            onTap: () async {
-              await CSApi.auth.signOut();
-              ref.read(asyncDataProvider.notifier).clear();
-              coinseekRouter.push(CSRoutes.splash);
-            },
-            child: const PfpWidget(),
-          ),
-          MapFabWidget(
-            alignment: Alignment.topLeft,
-            onTap: friendRequestsModalSheet,
-            child: CircleAvatar(
-              child: Icon(Pixel.users, color: AppAssets.colors.black),
-            ),
-          ),
+          SafeArea(
+              child: Stack(
+            children: [
+              MapFabWidget(
+                alignment: Alignment.topRight,
+                onTap: () async {
+                  await CSApi.auth.signOut();
+                  ref.read(asyncDataProvider.notifier).clear();
+                  coinseekRouter.push(CSRoutes.splash);
+                },
+                child: const PfpWidget(),
+              ),
+              MapFabWidget(
+                alignment: Alignment.topLeft,
+                onTap: friendRequestsModalSheet,
+                child: CircleAvatar(
+                  child: Icon(Pixel.users, color: AppAssets.colors.black),
+                ),
+              ),
+            ],
+          ))
         ],
       );
     }
 
     return homeData.when(
       loading: () => Scaffold(
-          body: Center(
-              child: CircularProgressIndicator(color: AppAssets.colors.black))),
+        body: Center(
+          child: CircularProgressIndicator(color: AppAssets.colors.black),
+        ),
+      ),
       error: (err, stack) =>
           Scaffold(body: Center(child: Text(err.toString()))),
       data: (home) {
         return Scaffold(
-          appBar: nilAppBar(),
+          // appBar: nilAppBar(),
           body: SlidingUpPanel(
             body: homeBody(home.markers),
-            panel: Container(),
+            panel: const Leaderboard(),
             collapsed: HomePanelCollapsedWidget(
-              balance: home.user?.balance.toString() ?? 'unknown',
+              balance: home.user?.balance.toString() ?? '0',
             ),
             borderRadius: BorderRadius.circular(20.0),
           ),
