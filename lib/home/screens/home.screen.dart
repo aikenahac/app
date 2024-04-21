@@ -113,6 +113,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
+                Text(
+                  tr.requests,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppAssets.colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5.0),
                 requestsData.when(
                   loading: () => Center(
                       child: CircularProgressIndicator(

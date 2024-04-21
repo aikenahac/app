@@ -17,5 +17,7 @@
   "location_services_disabled": "Location services on this device are not enabled",
   "location_disallowed": "Location permissions are not allowed for this app",
   "restart_app_error": "Something went wrong, please restart the app",
-  "enter_friend_email": "Enter your friends' email"
+  "enter_friend_email": "Enter your friends' email",
+  "accept": "Accept",
+  "requests": "Requests:"
 }
