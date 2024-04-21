@@ -40,4 +40,22 @@ class HomeApi {
 
     return user;
   }
+
+  Future<void> sendFriendRequest(String friend) async {
+    await ApiClient.post('/friends/request', {
+      "email": friend,
+    });
+  }
+
+  Future<List<UserModel>> getFriendRequests() async {
+    final resp = await ApiClient.getMany('/friends/requests');
+    final List<UserModel> requests = [];
+
+    for (var req in resp) {
+      final parsedRequest = UserModel.fromJson(req);
+      requests.add(parsedRequest);
+    }
+
+    return requests;
+  }
 }

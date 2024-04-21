@@ -19,4 +19,5 @@ class AppColors {
 class AppImages {
   String markerIcon = 'assets/markers/coin_marker.png';
   String coinIcon = 'assets/coin.png';
+  String profilePicture = 'assets/pfp.png';
 }

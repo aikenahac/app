@@ -40,6 +40,7 @@ dependencies:
   # Location
   geolocator: ^11.0.0
   google_maps_flutter: ^2.6.1
+  pixelarticons: ^0.4.0
 
 dev_dependencies:
   flutter_test:

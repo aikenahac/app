@@ -3,14 +3,21 @@ import 'dart:async';
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
+import 'package:coinseek/home/providers/add_friend.provider.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
+import 'package:coinseek/home/providers/requests.provider.dart';
+import 'package:coinseek/home/widgets/friend_request.widget.dart';
+import 'package:coinseek/home/widgets/map_fab.widget.dart';
 import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
+import 'package:coinseek/home/widgets/pfp.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pixelarticons/pixel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -76,6 +83,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  void friendRequestsModalSheet() {
+    final requestsData = ref.watch(asyncRequestsProvider);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 60.0,
+                child: TextField(
+                  controller: ref.watch(addFriendControllerProvider),
+                  decoration: textFieldDecoration,
+                  style: GoogleFonts.poppins(),
+                  cursorColor: AppAssets.colors.black,
+                  cursorHeight: 20.0,
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              requestsData.when(
+                loading: () => Center(
+                    child: CircularProgressIndicator(
+                        color: AppAssets.colors.black)),
+                error: (err, stack) => Center(child: Text(err.toString())),
+                data: (requests) {
+                  return ListView.separated(
+                    itemBuilder: (c, i) =>
+                        FriendRequestWidget(user: requests[i]),
+                    separatorBuilder: (c, i) => const SizedBox(height: 5.0),
+                    itemCount: requests.length,
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     AppTranslations.init(context);
@@ -106,18 +155,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               completer.complete(controller);
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: FloatingActionButton(
-                onPressed: () async {
-                  await CSApi.auth.signOut();
-                  ref.read(asyncDataProvider.notifier).clear();
-                  coinseekRouter.push(CSRoutes.splash);
-                },
-                child: Icon(Icons.logout, color: AppAssets.colors.black),
-              ),
+          MapFabWidget(
+            alignment: Alignment.topRight,
+            onTap: () async {
+              await CSApi.auth.signOut();
+              ref.read(asyncDataProvider.notifier).clear();
+              coinseekRouter.push(CSRoutes.splash);
+            },
+            child: const PfpWidget(),
+          ),
+          MapFabWidget(
+            alignment: Alignment.topLeft,
+            onTap: friendRequestsModalSheet,
+            child: CircleAvatar(
+              child: Icon(Pixel.users, color: AppAssets.colors.black),
             ),
           ),
         ],
@@ -146,3 +197,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
+InputDecoration textFieldDecoration = InputDecoration(
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10.0),
+    borderSide: BorderSide(
+      color: AppAssets.colors.black.withOpacity(0.4),
+    ),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    borderSide: BorderSide(color: AppAssets.colors.darkGreen),
+  ),
+  prefixIcon: const Icon(Pixel.userplus),
+  prefixIconColor: AppAssets.colors.black,
+  suffix: IconButton(
+    onPressed: () {},
+    icon: Icon(
+      Pixel.arrowright,
+      color: AppAssets.colors.black,
+    ),
+  ),
+  hintText: tr.enter_friend_email,
+);

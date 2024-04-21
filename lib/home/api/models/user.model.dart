@@ -6,9 +6,11 @@ class UserModel {
 
   late String name;
   late int balance;
+  late String email;
 
   UserModel.fromJson(Map<String, dynamic> json) {
     name = json['name'] as String;
     balance = json['balance'] as int;
+    email = json['email'] as String;
   }
 }
