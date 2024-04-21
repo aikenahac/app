@@ -101,7 +101,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   await CSApi.auth.signOut();
                   ref.read(asyncDataProvider.notifier).clear();
                   coinseekRouter.push(CSRoutes.splash);
-                  ref.invalidate(asyncDataProvider);
                 },
                 child: Icon(Icons.logout, color: AppAssets.colors.black),
               ),
