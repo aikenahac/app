@@ -83,57 +83,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  void friendRequestsModalSheet() {
-    final requestsData = ref.watch(asyncRequestsProvider);
-
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 60.0,
-                child: TextField(
-                  controller: ref.watch(addFriendControllerProvider),
-                  decoration: textFieldDecoration,
-                  style: GoogleFonts.poppins(),
-                  cursorColor: AppAssets.colors.black,
-                  cursorHeight: 20.0,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              requestsData.when(
-                loading: () => Center(
-                    child: CircularProgressIndicator(
-                        color: AppAssets.colors.black)),
-                error: (err, stack) => Center(child: Text(err.toString())),
-                data: (requests) {
-                  return ListView.separated(
-                    itemBuilder: (c, i) =>
-                        FriendRequestWidget(user: requests[i]),
-                    separatorBuilder: (c, i) => const SizedBox(height: 5.0),
-                    itemCount: requests.length,
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     AppTranslations.init(context);
 
     final coinseekRouter = ref.watch(csRouterProvider);
     final homeData = ref.watch(asyncDataProvider);
+    final requestsData = ref.watch(asyncRequestsProvider);
 
     final Completer<GoogleMapController> completer =
         Completer<GoogleMapController>();
+
+    void friendRequestsModalSheet() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 60.0,
+                  child: TextField(
+                    controller: ref.watch(addFriendControllerProvider),
+                    decoration: textFieldDecoration,
+                    style: GoogleFonts.poppins(),
+                    cursorColor: AppAssets.colors.black,
+                    cursorHeight: 20.0,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                requestsData.when(
+                  loading: () => Center(
+                      child: CircularProgressIndicator(
+                          color: AppAssets.colors.black)),
+                  error: (err, stack) => Center(child: Text(err.toString())),
+                  data: (requests) {
+                    return Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (c, i) =>
+                            FriendRequestWidget(user: requests[i]),
+                        separatorBuilder: (c, i) => const SizedBox(height: 5.0),
+                        itemCount: requests.length,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     Widget homeBody(Set<Marker> markers) {
       if (currentLocation == null) {

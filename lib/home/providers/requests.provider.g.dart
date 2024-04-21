@@ -6,7 +6,7 @@ part of 'requests.provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$asyncRequestsHash() => r'2eed4018f2ac46ac6e4a1f0c0f1f3abe984781e0';
+String _$asyncRequestsHash() => r'39f3eee4a6f65896b25fb47515420d112ebce3cf';
 
 /// See also [AsyncRequests].
 @ProviderFor(AsyncRequests)
