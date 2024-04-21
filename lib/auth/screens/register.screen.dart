@@ -54,7 +54,6 @@ class RegisterScreen extends ConsumerWidget {
           showSnackbar(tr.user_exists);
         }
       } catch (e) {
-        print(e);
         return;
       }
 
@@ -65,7 +64,6 @@ class RegisterScreen extends ConsumerWidget {
           currentPos,
         );
       } catch (e) {
-        print('Error $e');
         return;
       }
 

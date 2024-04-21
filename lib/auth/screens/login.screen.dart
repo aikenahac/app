@@ -33,15 +33,12 @@ class LoginScreen extends ConsumerWidget {
         );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          print(tr.no_user_found);
           showSnackbar(tr.no_user_found);
         } else if (e.code == 'wrong-password') {
-          print(tr.wrong_password);
           showSnackbar(tr.wrong_password);
         }
         return;
       } catch (e) {
-        print(e);
         return;
       }
 
