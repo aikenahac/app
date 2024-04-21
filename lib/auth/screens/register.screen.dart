@@ -10,6 +10,7 @@ import 'package:coinseek/utils/snackbar.util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
@@ -26,6 +27,27 @@ class RegisterScreen extends ConsumerWidget {
     final obscurePasswordController = ref.watch(obscurePaswordRegisterProvider);
 
     final coinseekRouter = ref.watch(csRouterProvider);
+
+    Future<Position?> getCurrentLocation() async {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        return null;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return null;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        return null;
+      }
+
+      return await Geolocator.getCurrentPosition();
+    }
 
     void register() async {
       if (displayNameController.text.isEmpty ||
@@ -58,7 +80,11 @@ class RegisterScreen extends ConsumerWidget {
       }
 
       try {
-        await CSApi.setDisplayName(displayNameController.text);
+        final currentPos = await getCurrentLocation();
+        await CSApi.setDisplayNameAndAnchor(
+          displayNameController.text,
+          currentPos,
+        );
       } catch (e) {
         print('Error $e');
         return;
