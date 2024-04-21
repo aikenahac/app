@@ -101,6 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   await CSApi.auth.signOut();
                   ref.read(asyncDataProvider.notifier).clear();
                   coinseekRouter.push(CSRoutes.splash);
+                  ref.invalidate(asyncDataProvider);
                 },
                 child: Icon(Icons.logout, color: AppAssets.colors.black),
               ),
@@ -114,7 +115,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       loading: () => Scaffold(
           body: Center(
               child: CircularProgressIndicator(color: AppAssets.colors.black))),
-      error: (err, stack) => const Scaffold(body: Center(child: Text('err'))),
+      error: (err, stack) =>
+          Scaffold(body: Center(child: Text(err.toString()))),
       data: (home) {
         return Scaffold(
           appBar: nilAppBar(),
