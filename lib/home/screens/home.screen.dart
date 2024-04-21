@@ -178,6 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               MapFabWidget(
                 alignment: Alignment.topRight,
                 onTap: () async {
+                  updateLocationTimer.cancel();
                   await CSApi.auth.signOut();
                   ref.read(asyncDataProvider.notifier).clear();
                   coinseekRouter.push(CSRoutes.splash);
