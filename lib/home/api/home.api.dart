@@ -67,7 +67,18 @@ class HomeApi {
 
   Future<List<UserModel>> getFriends() async {
     final res = await ApiClient.getMany('/friends');
-    print(res);
     return res.map((u) => UserModel.fromJson(u)).toList();
+  }
+
+  Future<void> updateAnchorPoint(LatLng location) async {
+    await ApiClient.patch('/user', {
+      "centerPoint": [location.latitude, location.longitude]
+    });
+  }
+
+  Future<void> updateName(String name) async {
+    await ApiClient.patch('/user', {
+      "name": name,
+    });
   }
 }

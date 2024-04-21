@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:coinseek/core/api/api.dart';
-import 'package:coinseek/core/router.dart';
 import 'package:coinseek/home/providers/add_friend.provider.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
 import 'package:coinseek/home/providers/requests.provider.dart';
@@ -10,6 +9,7 @@ import 'package:coinseek/home/widgets/leaderboard.widget.dart';
 import 'package:coinseek/home/widgets/map_fab.widget.dart';
 import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
 import 'package:coinseek/home/widgets/pfp.widget.dart';
+import 'package:coinseek/home/widgets/profile.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/current_location.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
@@ -67,7 +67,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     AppTranslations.init(context);
 
-    final coinseekRouter = ref.watch(csRouterProvider);
     final homeData = ref.watch(asyncDataProvider);
     final requestsData = ref.watch(asyncRequestsProvider);
 
@@ -157,10 +156,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               MapFabWidget(
                 alignment: Alignment.topRight,
                 onTap: () async {
-                  updateLocationTimer.cancel();
-                  await CSApi.auth.signOut();
-                  ref.read(asyncDataProvider.notifier).clear();
-                  coinseekRouter.push(CSRoutes.splash);
+                  // updateLocationTimer.cancel();
+                  // await CSApi.auth.signOut();
+                  // ref.read(asyncDataProvider.notifier).clear();
+                  // coinseekRouter.push(CSRoutes.splash);
+                  showDialog(
+                    context: context,
+                    builder: (context) => Profile(
+                      location: currentLocation,
+                    ),
+                  );
                 },
                 child: const PfpWidget(),
               ),
