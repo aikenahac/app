@@ -62,3 +62,4 @@ flutter:
     - .env
     - assets/
     - assets/markers/
+    - assets/icons/

@@ -10,6 +10,7 @@ import 'package:coinseek/home/widgets/leaderboard.widget.dart';
 import 'package:coinseek/home/widgets/map_fab.widget.dart';
 import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
 import 'package:coinseek/home/widgets/pfp.widget.dart';
+import 'package:coinseek/home/widgets/powerup.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/current_location.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
@@ -37,7 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     reportCurrentLocation();
-    updateLocationTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    updateLocationTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       reportCurrentLocation();
     });
   }
@@ -131,6 +132,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
 
+    void powerupsModalSheet() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
+                  tr.powerups,
+                  style: TextStyle(
+                    color: AppAssets.colors.black,
+                    fontSize: 24.0,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                PowerupWidget(
+                  name: tr.blindness_powerup,
+                  description: tr.blindness_powerup_description,
+                  icon: AppAssets.images.blindOthersPowerup,
+                ),
+                PowerupWidget(
+                  name: tr.multiplier_powerup,
+                  description: tr.multiplier_powerup_description,
+                  icon: AppAssets.images.spawnMultiplierPowerup,
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     Widget homeBody(Set<Marker> markers) {
       if (currentLocation == null) {
         return Center(
@@ -145,34 +179,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             markers: markers,
             initialCameraPosition: CameraPosition(
               target: currentLocation!,
-              zoom: 15,
+              zoom: 13,
             ),
             onMapCreated: (GoogleMapController controller) {
               completer.complete(controller);
             },
           ),
           SafeArea(
-              child: Stack(
-            children: [
-              MapFabWidget(
-                alignment: Alignment.topRight,
-                onTap: () async {
-                  updateLocationTimer.cancel();
-                  await CSApi.auth.signOut();
-                  ref.read(asyncDataProvider.notifier).clear();
-                  coinseekRouter.push(CSRoutes.splash);
-                },
-                child: const PfpWidget(),
-              ),
-              MapFabWidget(
-                alignment: Alignment.topLeft,
-                onTap: friendRequestsModalSheet,
-                child: CircleAvatar(
-                  child: Icon(Pixel.users, color: AppAssets.colors.black),
+            child: Stack(
+              children: [
+                MapFabWidget(
+                  alignment: Alignment.topRight,
+                  onTap: () async {
+                    updateLocationTimer.cancel();
+                    await CSApi.auth.signOut();
+                    ref.read(asyncDataProvider.notifier).clear();
+                    coinseekRouter.push(CSRoutes.splash);
+                  },
+                  child: const PfpWidget(),
                 ),
-              ),
-            ],
-          ))
+                MapFabWidget(
+                  alignment: Alignment.topLeft,
+                  onTap: friendRequestsModalSheet,
+                  child: CircleAvatar(
+                    child: Icon(Pixel.users, color: AppAssets.colors.black),
+                  ),
+                ),
+                MapFabWidget(
+                  alignment: Alignment.centerRight,
+                  onTap: powerupsModalSheet,
+                  child: CircleAvatar(
+                    child: Icon(Pixel.zap, color: AppAssets.colors.black),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       );
     }
