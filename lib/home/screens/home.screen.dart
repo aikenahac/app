@@ -4,6 +4,7 @@ import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
+import 'package:coinseek/home/widgets/panel_collapsed.widget.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             markers: markers,
             initialCameraPosition: CameraPosition(
               target: currentLocation!,
-              zoom: 17.5,
+              zoom: 15,
             ),
             onMapCreated: (GoogleMapController controller) {
               completer.complete(controller);
@@ -134,8 +135,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           appBar: nilAppBar(),
           body: SlidingUpPanel(
             body: homeBody(home.markers),
-            panel: const Placeholder(),
-            collapsed: Text("neki"),
+            panel: Container(),
+            collapsed: HomePanelCollapsedWidget(
+              balance: home.user?.balance.toString() ?? 'unknown',
+            ),
             borderRadius: BorderRadius.circular(20.0),
           ),
         );

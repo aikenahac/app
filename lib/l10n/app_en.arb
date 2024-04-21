@@ -15,5 +15,6 @@
   "weak_password": "This password is too weak",
   "logout": "Logout",
   "location_services_disabled": "Location services on this device are not enabled",
-  "location_disallowed": "Location permissions are not allowed for this app"
+  "location_disallowed": "Location permissions are not allowed for this app",
+  "restart_app_error": "Something went wrong, please restart the app"
 }

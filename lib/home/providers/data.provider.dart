@@ -11,6 +11,7 @@ part 'data.provider.g.dart';
 class AsyncData extends _$AsyncData {
   Future<HomeDataModel> _fetchHomeData() async {
     final coins = await CSApi.home.getCoins();
+    final user = await CSApi.home.getUserInfo();
 
     final icon = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(), AppAssets.images.markerIcon);
@@ -23,7 +24,7 @@ class AsyncData extends _$AsyncData {
             ))
         .toSet();
 
-    return HomeDataModel(coins: coins, markers: markers);
+    return HomeDataModel(coins: coins, markers: markers, user: user);
   }
 
   @override
@@ -32,6 +33,7 @@ class AsyncData extends _$AsyncData {
   }
 
   void clear() {
-    state = AsyncValue.data(HomeDataModel(coins: [], markers: <Marker>{}));
+    state = AsyncValue.data(
+        HomeDataModel(coins: [], markers: <Marker>{}, user: null));
   }
 }
