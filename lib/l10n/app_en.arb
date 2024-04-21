@@ -19,5 +19,11 @@
   "restart_app_error": "Something went wrong, please restart the app",
   "enter_friend_email": "Enter your friends' email",
   "accept": "Accept",
-  "requests": "Requests:"
+  "requests": "Requests:",
+  "buy": "Buy",
+  "blindness_powerup": "Blindness",
+  "blindness_powerup_description": "Blind your friend for 1h",
+  "multiplier_powerup": "Multiplier",
+  "multiplier_powerup_description": "2X your coin spawn rate",
+  "powerups": "Powerups"
 }
