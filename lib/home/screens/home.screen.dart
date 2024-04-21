@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:coinseek/core/api/api.dart';
+import 'package:coinseek/core/router.dart';
 import 'package:coinseek/home/providers/add_friend.provider.dart';
 import 'package:coinseek/home/providers/data.provider.dart';
 import 'package:coinseek/home/providers/requests.provider.dart';
@@ -70,6 +71,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final homeData = ref.watch(asyncDataProvider);
     final requestsData = ref.watch(asyncRequestsProvider);
+    final coinseekRouter = ref.watch(csRouterProvider);
 
     final Completer<GoogleMapController> completer =
         Completer<GoogleMapController>();
@@ -190,14 +192,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               MapFabWidget(
                 alignment: Alignment.topRight,
                 onTap: () async {
-                  // updateLocationTimer.cancel();
-                  // await CSApi.auth.signOut();
-                  // ref.read(asyncDataProvider.notifier).clear();
-                  // coinseekRouter.push(CSRoutes.splash);
                   showDialog(
                     context: context,
                     builder: (context) => Profile(
                       location: currentLocation,
+                      onLogout: () async {
+                        updateLocationTimer.cancel();
+                        await CSApi.auth.signOut();
+                        ref.read(asyncDataProvider.notifier).clear();
+                        coinseekRouter.pushReplacement(CSRoutes.splash);
+                      },
                     ),
                   );
                 },

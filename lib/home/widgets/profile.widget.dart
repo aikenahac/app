@@ -12,9 +12,11 @@ class Profile extends ConsumerWidget {
   const Profile({
     super.key,
     required this.location,
+    required this.onLogout,
   });
 
   final LatLng? location;
+  final Function onLogout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,6 +55,13 @@ class Profile extends ConsumerWidget {
                   ref.invalidate(asyncDataProvider);
                   context.pop();
                 });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            BottomButton(
+              label: "Logout",
+              onPressed: () {
+                onLogout();
               },
             ),
           ],
