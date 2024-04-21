@@ -83,12 +83,9 @@ class RegisterScreen extends ConsumerWidget {
           children: [
             Align(
               alignment: Alignment.topCenter,
-              child: Text(
-                tr.register,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 36.0,
-                ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Image.asset(AppAssets.images.logo),
               ),
             ),
             Column(

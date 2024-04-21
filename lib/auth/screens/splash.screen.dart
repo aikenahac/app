@@ -3,7 +3,6 @@ import 'package:coinseek/core/widgets/bottom_button.widget.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 
@@ -28,15 +27,9 @@ class SplashScreen extends ConsumerWidget {
           children: [
             Align(
               alignment: Alignment.center,
-              child: Text(
-                'CoinSeek',
-                style: GoogleFonts.chakraPetch(
-                  textStyle: TextStyle(
-                    fontSize: 80.0,
-                    color: AppAssets.colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Image.asset(AppAssets.images.logo),
               ),
             ),
             Padding(

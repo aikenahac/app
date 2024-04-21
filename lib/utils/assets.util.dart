@@ -22,4 +22,5 @@ class AppImages {
   String profilePicture = 'assets/pfp.png';
   String blindOthersPowerup = 'assets/icons/blind_others.png';
   String spawnMultiplierPowerup = 'assets/icons/spawn_multiplier.png';
+  String logo = 'assets/logo.png';
 }
