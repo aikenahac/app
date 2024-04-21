@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:coinseek/core/api/api.dart';
-import 'package:coinseek/core/api/api_client.dart';
 import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/home/providers/base_error.provider.dart';
@@ -11,8 +10,8 @@ import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -25,7 +24,6 @@ class HomeScreen extends ConsumerWidget {
     final coinseekRouter = ref.watch(csRouterProvider);
 
     final currentLatLng = ref.watch(currentLocationProvider);
-    final coinMarkers = ref.watch(coinMarkersProvider);
 
     final homeData = ref.watch(asyncDataProvider);
 
@@ -62,7 +60,7 @@ class HomeScreen extends ConsumerWidget {
 
     getCurrentLocation();
 
-    Widget homeBody() {
+    Widget homeBody(Set<Marker> markers) {
       if (currentLatLng == null) {
         return Center(
           child: CircularProgressIndicator(color: AppAssets.colors.black),
@@ -73,7 +71,7 @@ class HomeScreen extends ConsumerWidget {
         children: [
           GoogleMap(
             myLocationEnabled: true,
-            markers: coinMarkers,
+            markers: markers,
             initialCameraPosition: CameraPosition(
               target: currentLatLng,
               zoom: 17.5,
@@ -90,7 +88,6 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: () async {
                   await CSApi.auth.signOut();
                   coinseekRouter.push(CSRoutes.splash);
-                  coinMarkers.clear();
                 },
                 child: Icon(Icons.logout, color: AppAssets.colors.black),
               ),
@@ -109,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
         return Scaffold(
           appBar: nilAppBar(),
           body: SlidingUpPanel(
-            body: homeBody(),
+            body: homeBody(home.markers),
             panel: const Placeholder(),
             collapsed: Text("neki"),
             borderRadius: BorderRadius.circular(20.0),

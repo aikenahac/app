@@ -1,6 +1,5 @@
 import 'package:coinseek/core/api/api.dart';
 import 'package:coinseek/home/api/models/home.model.dart';
-import 'package:coinseek/home/providers/location.provider.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,21 +11,19 @@ part 'data.provider.g.dart';
 class AsyncData extends _$AsyncData {
   Future<HomeDataModel> _fetchHomeData() async {
     final coins = await CSApi.home.getCoins();
-    final Set<Marker> markers = {};
 
-    for (var coin in coins) {
-      Marker marker = Marker(
-        markerId: MarkerId(coin.id),
-        position: coin.location,
-        icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), AppAssets.images.markerIcon),
-      );
-      markers.add(marker);
-    }
+    final icon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), AppAssets.images.markerIcon);
 
-    ref.read(coinMarkersProvider.notifier).state = markers;
+    final markers = coins
+        .map((coin) => Marker(
+              markerId: MarkerId(coin.id),
+              position: coin.location,
+              icon: icon,
+            ))
+        .toSet();
 
-    return HomeDataModel(coins: coins);
+    return HomeDataModel(coins: coins, markers: markers);
   }
 
   @override
