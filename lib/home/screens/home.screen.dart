@@ -14,11 +14,23 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  getCurrentLocation() {}
+
+  @override
+  Widget build(BuildContext context) {
     AppTranslations.init(context);
 
     final coinseekRouter = ref.watch(csRouterProvider);
@@ -87,6 +99,7 @@ class HomeScreen extends ConsumerWidget {
               child: FloatingActionButton(
                 onPressed: () async {
                   await CSApi.auth.signOut();
+                  ref.read(asyncDataProvider.notifier).clear();
                   coinseekRouter.push(CSRoutes.splash);
                 },
                 child: Icon(Icons.logout, color: AppAssets.colors.black),

@@ -30,4 +30,8 @@ class AsyncData extends _$AsyncData {
   FutureOr<HomeDataModel> build() async {
     return _fetchHomeData();
   }
+
+  void clear() {
+    state = AsyncValue.data(HomeDataModel(coins: [], markers: <Marker>{}));
+  }
 }

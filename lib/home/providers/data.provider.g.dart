@@ -6,7 +6,7 @@ part of 'data.provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$asyncDataHash() => r'cd67f21743ed326b3ade6dfc4477f97683ce4ae8';
+String _$asyncDataHash() => r'8cbeb2f655389c79fde8f1fb4b0493a3987bb329';
 
 /// See also [AsyncData].
 @ProviderFor(AsyncData)

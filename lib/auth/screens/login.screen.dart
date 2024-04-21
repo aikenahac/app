@@ -4,6 +4,7 @@ import 'package:coinseek/core/router.dart';
 import 'package:coinseek/core/widgets/bottom_button.widget.dart';
 import 'package:coinseek/core/widgets/nil_app_bar.widget.dart';
 import 'package:coinseek/core/widgets/text_field.widget.dart';
+import 'package:coinseek/home/providers/data.provider.dart';
 import 'package:coinseek/utils/assets.util.dart';
 import 'package:coinseek/utils/i18n.util.dart';
 import 'package:coinseek/utils/snackbar.util.dart';
@@ -44,6 +45,7 @@ class LoginScreen extends ConsumerWidget {
         return;
       }
 
+      ref.invalidate(asyncDataProvider);
       coinseekRouter.push(CSRoutes.home);
 
       emailController.clear();
